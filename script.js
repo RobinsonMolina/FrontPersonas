@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3001/api/users"; // Reemplaza con tu backend en Vercel
+const API_URL = "https://backend-personas.vercel.app/api/users"; // Reemplaza con tu backend en Vercel
 
 document.getElementById("userForm").addEventListener("submit", async (event) => {
     event.preventDefault();
