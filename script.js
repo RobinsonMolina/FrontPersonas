@@ -1,62 +1,59 @@
-const API_URL = "https://backend-personas.vercel.app/api/users"; // Asegúrate de cambiar esta URL
-
 document.addEventListener("DOMContentLoaded", () => {
-    getUsers();
-    document.getElementById("userForm").addEventListener("submit", addUser);
+    document.getElementById("userForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        if (!name || !email) {
+            alert("Todos los campos son obligatorios.");
+            return;
+        }
+
+        const newUser = { name, email };
+
+        try {
+            const response = await fetch("https://backend-personas.vercel.app/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newUser)
+            });
+
+            if (!response.ok) {
+                throw new Error("Error al agregar usuario");
+            }
+
+            const data = await response.json();
+            alert("Usuario agregado con éxito");
+
+            // Recargar la lista de usuarios después de agregar
+            loadUsers();
+        } catch (error) {
+            console.error("Error agregando usuario:", error);
+            alert("Hubo un error al agregar el usuario.");
+        }
+    });
+
+    loadUsers();
 });
 
-// Obtener usuarios y mostrar en la tabla
-async function getUsers() {
+async function loadUsers() {
     try {
-        let response = await fetch(API_URL);
-        if (!response.ok) throw new Error("Error obteniendo usuarios");
+        const response = await fetch("https://backend-personas.vercel.app/api/users");
+        if (!response.ok) throw new Error("Error al obtener usuarios");
 
-        let users = await response.json();
-        renderUsers(users);
+        const users = await response.json();
+        const userList = document.getElementById("userList");
+        userList.innerHTML = ""; // Limpiar la lista
+
+        users.forEach(user => {
+            const li = document.createElement("li");
+            li.textContent = `${user.name} - ${user.email}`;
+            userList.appendChild(li);
+        });
     } catch (error) {
         console.error("Error obteniendo usuarios:", error);
     }
-}
-
-// Agregar un nuevo usuario
-async function addUser(event) {
-    event.preventDefault();
-
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const occupation = document.getElementById("occupation").value;
-
-    const newUser = { name, email, phone, occupation };
-
-    try {
-        let response = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newUser)
-        });
-
-        if (!response.ok) throw new Error("Error al agregar usuario");
-
-        getUsers(); // Recargar la lista
-        document.getElementById("userForm").reset();
-    } catch (error) {
-        console.error("Error agregando usuario:", error);
-    }
-}
-
-// Mostrar usuarios en la tabla
-function renderUsers(users) {
-    const tableBody = document.getElementById("usersTableBody");
-    tableBody.innerHTML = "";
-
-    users.forEach(user => {
-        let row = `<tr>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>${user.phone}</td>
-            <td>${user.occupation}</td>
-        </tr>`;
-        tableBody.innerHTML += row;
-    });
 }
