@@ -4,17 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Agregar Usuario</h1>
-    <form id="userForm">
-        <input type="text" id="name" placeholder="Nombre" required>
-        <input type="email" id="email" placeholder="Correo" required>
-        <button type="submit">Agregar Usuario</button>
-    </form>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="mb-4 text-center">Agregar Usuario</h2>
+                <form id="userForm" class="row g-3">
+                    <div class="col-md-6 form-group">
+                        <label for="name" class="form-label fw-bold">Nombre</label>
+                        <input type="text" id="name" class="form-control" placeholder="Ingrese su nombre" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="email" class="form-label fw-bold">Correo</label>
+                        <input type="email" id="email" class="form-control" placeholder="Ingrese su correo" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="telefono" class="form-label fw-bold">Teléfono</label>
+                        <input type="text" id="telefono" class="form-control" placeholder="Ingrese su teléfono" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="ocupacion" class="form-label fw-bold">Ocupación</label>
+                        <input type="text" id="ocupacion" class="form-control" placeholder="Ingrese su ocupación" required>
+                    </div>
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-primary px-4 py-2">Agregar Usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    <h2>Lista de Usuarios</h2>
-    <ul id="userList"></ul>
+        <h2 class="mt-5">Registros de Personas</h2>
+        <div class="table-responsive">
+            <table class="table table-striped shadow-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Ocupación</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaPersonas">
+                    <!-- Aquí se llenarán los datos -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
