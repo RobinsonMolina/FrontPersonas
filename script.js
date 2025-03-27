@@ -1,39 +1,62 @@
-const API_URL = "https://backend-personas.vercel.app/api/users"; // Reemplaza con tu backend en Vercel
+const API_URL = "https://tu-backend.vercel.app/api/users"; // Asegúrate de cambiar esta URL
 
-document.getElementById("userForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const newUser = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        job: document.getElementById("job").value,
-    };
-
-    await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
-    });
-
-    document.getElementById("userForm").reset();
-    loadUsers();
+document.addEventListener("DOMContentLoaded", () => {
+    getUsers();
+    document.getElementById("userForm").addEventListener("submit", addUser);
 });
 
-async function loadUsers() {
-    const response = await fetch(API_URL);
-    const users = await response.json();
-    const tableBody = document.getElementById("userTableBody");
+// Obtener usuarios y mostrar en la tabla
+async function getUsers() {
+    try {
+        let response = await fetch(API_URL);
+        if (!response.ok) throw new Error("Error obteniendo usuarios");
 
-    tableBody.innerHTML = users.map(user =>
-        `<tr>
+        let users = await response.json();
+        renderUsers(users);
+    } catch (error) {
+        console.error("Error obteniendo usuarios:", error);
+    }
+}
+
+// Agregar un nuevo usuario
+async function addUser(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const occupation = document.getElementById("occupation").value;
+
+    const newUser = { name, email, phone, occupation };
+
+    try {
+        let response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newUser)
+        });
+
+        if (!response.ok) throw new Error("Error al agregar usuario");
+
+        getUsers(); // Recargar la lista
+        document.getElementById("userForm").reset();
+    } catch (error) {
+        console.error("Error agregando usuario:", error);
+    }
+}
+
+// Mostrar usuarios en la tabla
+function renderUsers(users) {
+    const tableBody = document.getElementById("usersTableBody");
+    tableBody.innerHTML = "";
+
+    users.forEach(user => {
+        let row = `<tr>
             <td>${user.name}</td>
             <td>${user.email}</td>
             <td>${user.phone}</td>
-            <td>${user.job}</td>
-        </tr>`
-    ).join("");
+            <td>${user.occupation}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+    });
 }
-
-// Cargar usuarios al iniciar
-loadUsers();
