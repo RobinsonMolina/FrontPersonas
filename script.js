@@ -1,4 +1,4 @@
-const API_URL = "https://tu-backend.vercel.app/api/users"; // Asegúrate de cambiar esta URL
+const API_URL = "https://backend-personas.vercel.app/api/users"; // Asegúrate de cambiar esta URL
 
 document.addEventListener("DOMContentLoaded", () => {
     getUsers();
